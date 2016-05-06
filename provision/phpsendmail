@@ -1,0 +1,23 @@
+#!/usr/bin/php
+<?php
+$logfile = '/vagrant/protected/runtime/mail-log.html';
+
+function num_pad($number, $n)
+{
+	return str_pad((int)$number, $n, "0", STR_PAD_LEFT);
+}
+
+//* Get the email content
+$log_output = "<p>****" . date('Y-m-d H:i:s') . "****</p>\r\n";
+$handle = fopen('php://stdin', 'r');
+$count = 0;
+$log_output .= "<pre>\r\n";
+while (!feof($handle)) {
+	$count++;
+	$buffer = trim(fgets($handle));
+	$log_output .= num_pad($count, 2) . ": " . $buffer . "\r\n";
+}
+$log_output .= "</pre>\r\n";
+
+file_put_contents($logfile, $log_output, FILE_APPEND);
+?>
